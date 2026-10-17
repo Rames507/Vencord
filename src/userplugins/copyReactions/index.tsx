@@ -5,7 +5,7 @@
  */
 
 import definePlugin from "@utils/types";
-import { Menu, RestAPI, Toasts } from "@webpack/common";
+import { Menu, RestAPI, showToast } from "@webpack/common";
 
 
 interface User {
@@ -33,11 +33,7 @@ export default definePlugin({
                     label="Copy Reactions as JSON"
                     action={async () => {
                         try {
-                            Toasts.show({
-                                message: "Fetching reaction data...",
-                                type: Toasts.Type.MESSAGE,
-                                id: "fetch-reactions"
-                            });
+                            showToast({ text: "Fetching reaction data..." });
 
                             const reactionsData = await Promise.all(
                                 message.reactions.map(async reaction => {
@@ -101,17 +97,9 @@ export default definePlugin({
                             }, null, 2);
 
                             navigator.clipboard.writeText(jsonOutput);
-                            Toasts.show({
-                                message: "Reactions copied to clipboard!",
-                                type: Toasts.Type.SUCCESS,
-                                id: Toasts.genId()
-                            });
+                            showToast({ text: "Reactions copied to clipboard!", variant: "success" });
                         } catch (error) {
-                            Toasts.show({
-                                message: "Failed to copy reactions",
-                                type: Toasts.Type.FAILURE,
-                                id: Toasts.genId()
-                            });
+                            showToast({ text: "Failed to copy reactions", variant: "critical" });
                             console.error("Error copying reactions:", error);
                         }
                     }}
